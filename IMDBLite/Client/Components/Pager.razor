@@ -1,0 +1,91 @@
+﻿@if (TotalPages > 0)
+{
+    <div class="d-flex flex-column flex-md-row align-items-center pb-1 mb-4">
+        <div class="pagination">
+            <button type="button" class="page-item" disabled="@(HasPreviousPage ? null : "disabled")" @onclick="@(() => OnClick.InvokeAsync(PageIndex - 1))">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </button>
+            @if (TotalPages <= 8)
+            {
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    if (i == PageIndex)
+                    {
+                        <span class="page-item active">@PageIndex</span>
+                    }
+                    else
+                    {
+                        int tempI = i;
+                        <button type="button" class="page-item" @onclick="@(() => OnClick.InvokeAsync(tempI))">
+                            @i
+                        </button>
+                    }
+                }
+            }
+            else
+            {
+                if (PageIndex - 2 >= 2)
+                {
+                    <button type="button" class="page-item" @onclick="@(() => OnClick.InvokeAsync(1))">1</button>
+                    if (PageIndex - 2 > 2)
+                    {
+                        <button type="button" class="page-item">...</button>
+                    }
+                }
+                @for (int i = PageIndex - 2; i <= PageIndex + 2; i++)
+                {
+                    if (i == PageIndex)
+                    {
+                        <span class="page-item active">@PageIndex</span>
+                    }
+                    else if (i >= 1 && i <= TotalPages)
+                    {
+                        int tempI = i;
+                        <button type="button" class="page-item" @onclick="@(() => OnClick.InvokeAsync(tempI))">
+                            @i
+                        </button>
+                    }
+                }
+                if (PageIndex + 2 < TotalPages)
+                {
+                    if (PageIndex + 3 != TotalPages)
+                    {
+                        <button type="button" class="page-item">...</button>
+                    }
+                    <button type="button" class="page-item" @onclick="@(() => OnClick.InvokeAsync(TotalPages))">@TotalPages</button>
+                }
+            }
+            <button type="button" class="page-item" disabled="@(HasNextPage ? null : "disabled")" @onclick="@(() => OnClick.InvokeAsync(PageIndex + 1))">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="enumeration mt-3 mt-md-0 ml-md-3">Showing @ShowingFrom - @ShowingTo of @TotalCount</div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int PageIndex { get; set; }
+
+    [Parameter]
+    public int PageSize { get; set; }
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
+
+    [Parameter]
+    public bool HasPreviousPage { get; set; }
+
+    [Parameter]
+    public bool HasNextPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnClick { get; set; }
+
+    public int ShowingFrom { get => (PageIndex - 1) * PageSize + 1; }
+
+    public int ShowingTo { get => Math.Min(PageIndex * PageSize, TotalCount); }
+}

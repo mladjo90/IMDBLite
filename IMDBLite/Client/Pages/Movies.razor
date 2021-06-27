@@ -1,0 +1,133 @@
+﻿@page "/"
+@inject IMovieClient movieClient
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@*@attribute [Authorize]*@
+@inject HttpClient Http
+@inject IToastService toastService
+
+@if (allMovies != null && allMovies.Successful && allMovies.Items != null && allMovies.Items.Any())
+{
+    <h3>Movies</h3>
+    <div class="row mb-3">
+        <input type="search"
+               class="ui-clear custom_width"
+               @bind="@searchFilter"
+               @bind:event="oninput"
+               @onkeyup="@SearchFire"
+               placeholder='Enter phrases like "5 stars, at least 3 stars, after 2015, older than 5 years"'
+               data-vision="users-search-input" />
+
+        <input class="ui-clear custom-checkbox" type="checkbox" @onchange="eventArgs => { CheckboxClicked(eventArgs.Value); }" />
+        <label class="ui-clear custom-checkbox-label">Showing @(isTvShow ? "TV Shows" : "Movies")</label>
+    </div>
+
+    <div class="row table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cover</th>
+                    <th>Title</th>
+                    <th>Casts</th>
+                    <th>Release Date</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var movie in allMovies.Items)
+                {
+                    <tr>
+
+                        <td><img src=@movie.CoverImg asp-append-version="true" width="auto" /></td>
+                        <td><b>@movie.Title</b></td>
+                        <td>@movie.Cast</td>
+                        <td>@movie.ReleaseDate</td>
+                        <td>@*<RadzenRating Name="@movie.Id.ToString()" Value="(int)movie.Rating" />*@ @movie.Rating stars</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <Pager PageIndex=@allMovies.PageIndex
+               TotalPages=@allMovies.TotalPages
+               PageSize="10"
+               TotalCount="allMovies.Count"
+               OnClick="PageIndexChanged"
+               HasNextPage=@allMovies.HasNextPage
+               HasPreviousPage=@allMovies.HasPreviousPage>
+        </Pager>
+    </div>
+}
+<OverlaySpinner IsVisible="IsActionActive" />
+@code {
+    private PaginatedList<MovieDTO> allMovies;
+    private string searchFilter = "";
+    private Timer aTimer;
+    private bool IsActionActive;
+    private bool isTvShow = false;
+    private int pageNumber = 1;
+
+    public async void PageIndexChanged(int newPageNumber)
+    {
+        if (newPageNumber < 1 || newPageNumber > allMovies.TotalPages)
+            return;
+
+        pageNumber = newPageNumber;
+        await GetData();
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        aTimer = new System.Timers.Timer(1000);
+        aTimer.Elapsed += OnFinishEntering;
+        aTimer.AutoReset = false;
+        await GetFirstPage();
+    }
+
+    private async Task GetFirstPage()
+    {
+        pageNumber = 1;
+        await GetData();
+    }
+
+    private async Task GetData()
+    {
+        IsActionActive = true;
+        allMovies = await movieClient.GetAll(isTvShow, searchFilter, pageNumber, 10);
+        if (!allMovies.Successful)
+        {
+            allMovies.Errors.ForEach(el => toastService.ShowError(el));
+        }
+        IsActionActive = false;
+        StateHasChanged();
+    }
+
+    void SearchFire(KeyboardEventArgs e)
+    {
+        // remove previous one
+        aTimer.Stop();
+
+        // new timer
+        aTimer.Start();
+    }
+
+    private async void OnFinishEntering(Object source, ElapsedEventArgs e)
+    {
+        if (String.IsNullOrWhiteSpace(searchFilter) || String.IsNullOrEmpty(searchFilter))
+        {
+            await GetFirstPage();
+        }
+        else
+        {
+            if (searchFilter.Count() > 2)
+                await GetData();
+        }
+
+    }
+
+    async void CheckboxClicked(object checkedValue)
+    {
+        isTvShow = (bool)checkedValue;
+        await GetFirstPage();
+        StateHasChanged();
+    }
+}

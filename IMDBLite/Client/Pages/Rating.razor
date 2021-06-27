@@ -1,0 +1,136 @@
+﻿@page "/rating"
+@inject IMovieClient movieClient
+@inject IRatingClient ratingClient
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@*@attribute [Authorize]*@
+@inject IToastService toastService
+@inject HttpClient Http
+
+@if (allMovies != null && allMovies.Successful && allMovies.Items != null && allMovies.Items.Any())
+{
+    <h3>Rating</h3>
+    <div class="row mb-3">
+        <input class="ui-clear custom-checkbox" type="checkbox" @onchange="eventArgs => { CheckboxClicked(eventArgs.Value); }" />
+        <label class="ui-clear custom-checkbox-label">You're going to rate @(isTvShow ? "TV Shows" : "Movies")</label>
+        <RadzenButton style="margin: 0 1rem 1rem 1rem; width: 150px" IsBusy=@busyButton Disabled="@(!ratingsToSet.Any())" Click=@SaveData Text="Save" />
+    </div>
+
+    <div class="row table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cover</th>
+                    <th>Title</th>
+                    <th>Casts</th>
+                    <th>Release Date</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var movie in allMovies.Items)
+                {
+                    <tr>
+                        <td><img src=@movie.CoverImg asp-append-version="true" width="auto" /></td>
+                        <td><b>@movie.Title</b></td>
+                        <td>@movie.Cast</td>
+                        <td>@movie.ReleaseDate</td>
+                        <td><RadzenRating Value="@(ratingsToSet.Any(el => el.MovieId == movie.Id) ? ratingsToSet.FirstOrDefault(el => el.MovieId == movie.Id).RatingStars : 0)" Change=@(args => OnChange(args, movie.Id)) /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <Pager PageIndex=@allMovies.PageIndex
+               TotalPages=@allMovies.TotalPages
+               PageSize="10"
+               TotalCount="allMovies.Count"
+               OnClick="PageIndexChanged"
+               HasNextPage=@allMovies.HasNextPage
+               HasPreviousPage=@allMovies.HasPreviousPage>
+        </Pager>
+    </div>
+}
+<OverlaySpinner IsVisible="IsActionActive" />
+@code {
+    private PaginatedList<MovieDTO> allMovies;
+    private Timer aTimer;
+    private bool IsActionActive;
+    private bool isTvShow = false;
+    private int pageNumber = 1;
+    private List<RatingDTO> ratingsToSet = new List<RatingDTO>();
+    private bool busyButton = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetFirstPage();
+    }
+
+    void OnChange(int value, int name)
+    {
+        if (ratingsToSet.Any(el => el.MovieId == name))
+        {
+            if (value == 0)
+                ratingsToSet.Remove(ratingsToSet.FirstOrDefault(el => el.MovieId == name));
+            else
+                ratingsToSet.FirstOrDefault(el => el.MovieId == name).RatingStars = value;
+        }
+        else
+            if (value != 0)
+        {
+            ratingsToSet.Add(new RatingDTO
+            {
+                MovieId = name,
+                RatingStars = value
+            });
+        }
+    }
+
+    async Task SaveData()
+    {
+        busyButton = true;
+        var response = await ratingClient.SaveData(ratingsToSet);
+        busyButton = false;
+        if (response.Successful)
+        {
+            await GetFirstPage();
+            ratingsToSet.Clear();
+            toastService.ShowSuccess("Successfully saved data");
+            StateHasChanged();
+        }
+        else
+        {
+            response.Errors.ForEach(el => toastService.ShowError(el));
+        }
+    }
+    public async void PageIndexChanged(int newPageNumber)
+    {
+        if (newPageNumber < 1 || newPageNumber > allMovies.TotalPages)
+            return;
+
+        pageNumber = newPageNumber;
+        await GetData();
+        StateHasChanged();
+    }
+
+
+    private async Task GetFirstPage()
+    {
+        pageNumber = 1;
+        await GetData();
+    }
+
+    private async Task GetData()
+    {
+        IsActionActive = true;
+        allMovies = await movieClient.GetAllForRating(isTvShow, pageNumber, 10);
+        IsActionActive = false;
+        StateHasChanged();
+    }
+
+    async void CheckboxClicked(object checkedValue)
+    {
+        isTvShow = (bool)checkedValue;
+        await GetFirstPage();
+        StateHasChanged();
+    }
+}

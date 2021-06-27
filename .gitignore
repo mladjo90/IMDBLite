@@ -1,0 +1,9 @@
+
+obj/
+IMDBLite/Client/bin/
+IMDBLite.API.BLL/bin/
+IMDBLite.ServiceClientContracts/bin/
+IMDBLite/Server/bin/
+IMDBLite/Shared/bin/
+IMDBLite.API.DataModels/bin/
+IMDBLite.DTO/bin/
