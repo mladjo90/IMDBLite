@@ -28,6 +28,7 @@ Solution se sastoji od 7 projekata:
 	u Blazoru sam naisao na sledeci problem gdje se WebAssembly aplikacija skida na korisnikov racunar
 	i kao takva otvara mogucnost dohvatanja podataka za logovanje. Na ovaj nacin sam sakrio te podatke, ali
 	otvorio nove probleme. (Rijec je o Auth0)
+	Ovaj problem bi se mogao rijesiti mozda sa Basic authorizacijom na servis AuthApi.
 	
 *IMDBLite.DTO*
 	Sadrzi Data Transfer Request i Response objekte.
