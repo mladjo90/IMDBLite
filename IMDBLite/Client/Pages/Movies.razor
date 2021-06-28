@@ -5,22 +5,22 @@
 @inject HttpClient Http
 @inject IToastService toastService
 
+
+<h3>Movies</h3>
+<div class="row mb-3">
+    <input type="search"
+           class="ui-clear custom_width"
+           @bind="@searchFilter"
+           @bind:event="oninput"
+           @onkeyup="@SearchFire"
+           placeholder='Enter phrases like "5 stars, at least 3 stars, after 2015, older than 5 years"'
+           data-vision="users-search-input" />
+
+    <input class="ui-clear custom-checkbox" type="checkbox" @onchange="eventArgs => { CheckboxClicked(eventArgs.Value); }" />
+    <label class="ui-clear custom-checkbox-label">Showing @(isTvShow ? "TV Shows" : "Movies")</label>
+</div>
 @if (allMovies != null && allMovies.Successful && allMovies.Items != null && allMovies.Items.Any())
 {
-    <h3>Movies</h3>
-    <div class="row mb-3">
-        <input type="search"
-               class="ui-clear custom_width"
-               @bind="@searchFilter"
-               @bind:event="oninput"
-               @onkeyup="@SearchFire"
-               placeholder='Enter phrases like "5 stars, at least 3 stars, after 2015, older than 5 years"'
-               data-vision="users-search-input" />
-
-        <input class="ui-clear custom-checkbox" type="checkbox" @onchange="eventArgs => { CheckboxClicked(eventArgs.Value); }" />
-        <label class="ui-clear custom-checkbox-label">Showing @(isTvShow ? "TV Shows" : "Movies")</label>
-    </div>
-
     <div class="row table-responsive">
         <table class="table">
             <thead>
