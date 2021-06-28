@@ -72,7 +72,6 @@
 
         pageNumber = newPageNumber;
         await GetData();
-        StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync()
@@ -92,6 +91,7 @@
     private async Task GetData()
     {
         IsActionActive = true;
+        StateHasChanged();
         allMovies = await movieClient.GetAll(isTvShow, searchFilter, pageNumber, 10);
         if (!allMovies.Successful)
         {
@@ -128,6 +128,5 @@
     {
         isTvShow = (bool)checkedValue;
         await GetFirstPage();
-        StateHasChanged();
     }
 }

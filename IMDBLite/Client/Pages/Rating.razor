@@ -86,6 +86,8 @@
 
     async Task SaveData()
     {
+        IsActionActive = true;
+        StateHasChanged();
         busyButton = true;
         var response = await ratingClient.SaveData(ratingsToSet);
         busyButton = false;
@@ -94,12 +96,13 @@
             await GetFirstPage();
             ratingsToSet.Clear();
             toastService.ShowSuccess("Successfully saved data");
-            StateHasChanged();
         }
         else
         {
             response.Errors.ForEach(el => toastService.ShowError(el));
         }
+        IsActionActive = false;
+        StateHasChanged();
     }
     public async void PageIndexChanged(int newPageNumber)
     {
@@ -121,6 +124,7 @@
     private async Task GetData()
     {
         IsActionActive = true;
+        StateHasChanged();
         allMovies = await movieClient.GetAllForRating(isTvShow, pageNumber, 10);
         IsActionActive = false;
         StateHasChanged();
@@ -130,6 +134,5 @@
     {
         isTvShow = (bool)checkedValue;
         await GetFirstPage();
-        StateHasChanged();
     }
 }
