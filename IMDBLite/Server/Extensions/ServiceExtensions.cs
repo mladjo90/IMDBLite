@@ -1,5 +1,5 @@
-﻿using IMDBLite.API.DataModels;
-using Microsoft.EntityFrameworkCore;
+﻿using IMDBLite.API.BLL.RegistrationHelper;
+using IMDBLite.API.DataModels.Helper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,10 +19,14 @@ namespace IMDBLite.Server.Extensions
             });
         }
 
-        public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
+        public static void ConfigureDBContext(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = config["ConnectionStrings:DefaultConnection"];
-            services.AddDbContext<dataContext>(o => o.UseMySql(connectionString, new MySqlServerVersion(new Version(5, 6, 44))));
+            services.ConfigureMySqlContext(configuration);
+        }
+
+        public static void ConfigureBLL(this IServiceCollection services)
+        {
+            services.RegisterRepositoryDependencies();
         }
     }
 }

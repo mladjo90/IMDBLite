@@ -1,20 +1,10 @@
-using IMDBLite.API.BLL;
 using IMDBLite.Server.Extensions;
-using IMDBLite.BLL.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using IMDBLite.API.DataModels;
 
 namespace IMDBLite.Server
@@ -32,12 +22,16 @@ namespace IMDBLite.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            #region configure dependencis
+            
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.ConfigureCors();
             services.AddControllers();
-            services.ConfigureMySqlContext(Configuration);
+            services.ConfigureDBContext(Configuration);
+            services.ConfigureBLL();
+
+            #endregion
 
             services.Configure<Auth0Client>(Configuration.GetSection("Auth0Client"));
 
@@ -51,10 +45,6 @@ namespace IMDBLite.Server
                 options.Audience = Configuration["Auth0:ApiIdentifier"];
             });
 
-            services.AddScoped<IMovieRepository, MovieRepository>();
-            services.AddScoped<ICastRepository, CastRepository>();
-            services.AddScoped<IRatingRepository, RatingRepository>();
-            services.AddScoped<ICastInMovieRepository, CastInMovieRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
