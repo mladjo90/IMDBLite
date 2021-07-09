@@ -1,21 +1,12 @@
-﻿using IMDBLite.BLL.Interfaces;
-using IMDBLite.DTO.DTORequests;
-using IMDBLite.Shared.Helpers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
-using IMDBLite.Server.Extensions;
 using IMDBLite.API.DataModels;
 
 namespace IMDBLite.Server.Controllers

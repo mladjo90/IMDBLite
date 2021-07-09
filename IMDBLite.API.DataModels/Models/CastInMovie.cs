@@ -7,6 +7,7 @@ namespace IMDBLite.API.DataModels.Models
 {
     public partial class CastInMovie
     {
+        public int Id { get; set; }
         public int MovieId { get; set; }
         public int CastId { get; set; }
 

@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.Client", "IMDBLite
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.Shared", "IMDBLite\Shared\IMDBLite.Shared.csproj", "{A61492CF-DEF5-420A-8527-71C101B2B9FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.API.BLL", "IMDBLite.API.BLL\IMDBLite.API.BLL.csproj", "{ADB50B57-D9AE-4987-9812-BF212DBEF429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.API.Repository", "IMDBLite.API.BLL\IMDBLite.API.Repository.csproj", "{ADB50B57-D9AE-4987-9812-BF212DBEF429}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.API.DataModels", "IMDBLite.API.DataModels\IMDBLite.API.DataModels.csproj", "{B62128B6-CD78-4287-BFB4-6A48B60A2D26}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.ServiceClientContracts", "IMDBLite.ServiceClientContracts\IMDBLite.ServiceClientContracts.csproj", "{AD01EA9C-AD33-46B7-ACBA-A76A03F24A3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMDBLite.DTO", "IMDBLite.DTO\IMDBLite.DTO.csproj", "{794EEBCB-4428-444D-ABFC-8EB7B4BACDEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDBLite.DTO", "IMDBLite.DTO\IMDBLite.DTO.csproj", "{794EEBCB-4428-444D-ABFC-8EB7B4BACDEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMDBLite.BLL", "BLL\IMDBLite.BLL.csproj", "{BD2551F5-FC78-4B0C-8C58-E2BC2DDF4018}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{794EEBCB-4428-444D-ABFC-8EB7B4BACDEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{794EEBCB-4428-444D-ABFC-8EB7B4BACDEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{794EEBCB-4428-444D-ABFC-8EB7B4BACDEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD2551F5-FC78-4B0C-8C58-E2BC2DDF4018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD2551F5-FC78-4B0C-8C58-E2BC2DDF4018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD2551F5-FC78-4B0C-8C58-E2BC2DDF4018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD2551F5-FC78-4B0C-8C58-E2BC2DDF4018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

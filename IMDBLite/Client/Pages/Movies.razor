@@ -93,9 +93,13 @@
         IsActionActive = true;
         StateHasChanged();
         allMovies = await movieClient.GetAll(isTvShow, searchFilter, pageNumber, 10);
-        if (!allMovies.Successful)
+        if (allMovies != null && !allMovies.Successful)
         {
             allMovies.Errors.ForEach(el => toastService.ShowError(el));
+        }
+        else if(allMovies == null)
+        {
+            toastService.ShowError("Problem with fetching data");
         }
         IsActionActive = false;
         StateHasChanged();

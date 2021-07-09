@@ -10,6 +10,7 @@ namespace IMDBLite.API.DataModels
 {
     public partial class dataContext : DbContext
     {
+
         private IConfiguration Configuration { get; }
 
         public dataContext()
@@ -35,7 +36,6 @@ namespace IMDBLite.API.DataModels
                 optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             }
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8")
@@ -64,13 +64,15 @@ namespace IMDBLite.API.DataModels
 
             modelBuilder.Entity<CastInMovie>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("cast_in_movie");
 
                 entity.HasIndex(e => e.CastId, "FK_cast_in_movie_CastID");
 
                 entity.HasIndex(e => e.MovieId, "FK_cast_in_movie_MovieID");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("ID");
 
                 entity.Property(e => e.CastId)
                     .HasColumnType("int(11)")
@@ -81,13 +83,13 @@ namespace IMDBLite.API.DataModels
                     .HasColumnName("MovieID");
 
                 entity.HasOne(d => d.Cast)
-                    .WithMany()
+                    .WithMany(p => p.CastInMovies)
                     .HasForeignKey(d => d.CastId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_cast_in_movie_CastID");
 
                 entity.HasOne(d => d.Movie)
-                    .WithMany()
+                    .WithMany(p => p.CastInMovies)
                     .HasForeignKey(d => d.MovieId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_cast_in_movie_MovieID");

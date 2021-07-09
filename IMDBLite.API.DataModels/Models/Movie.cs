@@ -9,6 +9,7 @@ namespace IMDBLite.API.DataModels.Models
     {
         public Movie()
         {
+            CastInMovies = new HashSet<CastInMovie>();
             Ratings = new HashSet<Rating>();
         }
 
@@ -18,6 +19,7 @@ namespace IMDBLite.API.DataModels.Models
         public DateTime? ReleaseDate { get; set; }
         public bool? IsTvshow { get; set; }
 
+        public virtual ICollection<CastInMovie> CastInMovies { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

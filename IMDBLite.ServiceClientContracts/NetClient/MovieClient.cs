@@ -29,7 +29,6 @@ namespace IMDBLite.ServiceClientContracts.NetClient
               PageNumber = pageNumber,
               PageSize = pageSize
             });
-
             //if (response != null && response.IsSuccessStatusCode)
                 return await response.Content.ReadAsAsync<PaginatedList<MovieDTO>>();
             //return null;

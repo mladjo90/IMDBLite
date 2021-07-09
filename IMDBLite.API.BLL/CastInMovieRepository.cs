@@ -1,9 +1,8 @@
-﻿using GameBI.API.BLL;
-using IMDBLite.API.DataModels;
+﻿using IMDBLite.API.DataModels;
 using IMDBLite.API.DataModels.Models;
-using IMDBLite.BLL.Interfaces;
+using IMDBLite.API.Repository.Interfaces;
 
-namespace IMDBLite.API.BLL
+namespace IMDBLite.API.Repository
 {
     public class CastInMovieRepository : RepositoryBase<CastInMovie>, ICastInMovieRepository
     {

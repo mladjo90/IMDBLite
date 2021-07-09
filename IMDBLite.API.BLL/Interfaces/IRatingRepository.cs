@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMDBLite.BLL.Interfaces
+namespace IMDBLite.API.Repository.Interfaces
 {
     public interface IRatingRepository : IRepositoryBase<Rating>
     {

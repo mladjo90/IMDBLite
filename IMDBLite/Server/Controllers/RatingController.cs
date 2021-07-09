@@ -1,5 +1,6 @@
 ﻿using IMDBLite.API.DataModels.Helper;
 using IMDBLite.API.DataModels.Models;
+using IMDBLite.API.Repository.Interfaces;
 using IMDBLite.BLL.Interfaces;
 using IMDBLite.DTO.DTORequests;
 using IMDBLite.DTO.DTOResponse;
@@ -18,14 +19,13 @@ namespace IMDBLite.Server.Controllers
     [Authorize]
     public class RatingController : ControllerBase
     {
-        private readonly IRatingRepository _ratingRepository;
-        private readonly IConfiguration _configuration;
-        private ILogger<RatingController> _logger;
 
-        public RatingController(IRatingRepository ratingRepository, IConfiguration configuration, ILogger<RatingController> logger)
+        private ILogger<RatingController> _logger;
+        private IRatingBLL _ratingBLL;
+
+        public RatingController(IRatingBLL ratingBLL, ILogger<RatingController> logger)
         {
-            _ratingRepository = ratingRepository;
-            _configuration = configuration;
+            _ratingBLL = ratingBLL;
             _logger = logger;
         }
 
@@ -33,20 +33,9 @@ namespace IMDBLite.Server.Controllers
         [Route("[action]")]
         public async Task<IActionResult> SaveDataForRating([FromBody] List<RatingDTO> request)
         {
-            string freeUserName = await StoredProcedureHandler.FindFreeUser(_configuration.GetConnectionString("DefaultConnection"));
-            List<Rating> ratings = new List<Rating>(); 
-            foreach(var oneRating in request)
-            {
-                ratings.Add(new Rating{
-                    MovieId = oneRating.MovieId,
-                    RatingStarts = oneRating.RatingStars,
-                    UserId = freeUserName 
-                });
-            }
             try
             {
-                await _ratingRepository.InsertRangeAsync(ratings, true);
-                return Ok(new BaseResponse { Successful = true });
+                return Ok(new BaseResponse { Successful = await _ratingBLL.SaveDataForRating(request) });
             }
             catch(Exception e)
             {

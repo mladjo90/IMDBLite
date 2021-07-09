@@ -1,14 +1,9 @@
-﻿using IMDBLite.BLL.Interfaces;
+﻿using IMDBLite.API.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IMDBLite.API.BLL.RegistrationHelper
+namespace IMDBLite.API.Repository.RegistrationHelper
 {
-    public static class BLLRegistrationServices
+    public static class RepositoryRegistrationServices
     {
         public static void RegisterRepositoryDependencies(this IServiceCollection services)
         {

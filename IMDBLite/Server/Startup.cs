@@ -29,7 +29,8 @@ namespace IMDBLite.Server
             services.ConfigureCors();
             services.AddControllers();
             services.ConfigureDBContext(Configuration);
-            services.ConfigureBLL();
+            services.ConfigureRepository();
+            services.ConfigureBLl();
 
             #endregion
 
@@ -67,12 +68,14 @@ namespace IMDBLite.Server
             app.UseBlazorFrameworkFiles();
 
             app.UseStaticFiles();
-            app.UseCors("CorsPolicy");
 
             app.UseRouting();
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            //custom
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,5 +1,5 @@
 ﻿using IMDBLite.API.DataModels;
-using IMDBLite.BLL.Interfaces;
+using IMDBLite.API.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace GameBI.API.BLL
+namespace IMDBLite.API.Repository
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T :class
     {

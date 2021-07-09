@@ -30,7 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IMDBLite.API.BLL\IMDBLite.API.BLL.csproj" />
+    <ProjectReference Include="..\..\BLL\IMDBLite.BLL.csproj" />
+    <ProjectReference Include="..\..\IMDBLite.API.BLL\IMDBLite.API.Repository.csproj" />
     <ProjectReference Include="..\Client\IMDBLite.Client.csproj" />
     <ProjectReference Include="..\Shared\IMDBLite.Shared.csproj" />
   </ItemGroup>
