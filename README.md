@@ -1,51 +1,51 @@
 # IMDBLite
 Lite movie rating engine
 
-Aplikacija koja je napravljena je Lite Movie engine. U sustini korisnik ima mogucnost da vidi 
-filmove ili serije poredane po prosjecnoj ocjeni (od najvise ka najnizoj).
+The application that was created is the Lite Movie engine. Basically the user has the ability to see
+movies or series ranked at average (from highest to lowest).
 
-Takodje ima dodatnu mogucnost da vrsi ocjenjivanje filmova ili serija.
+It also has the additional ability to evaluate movies or series.
 
-RESENJE:
+SOLUTION:
 
-Solution se sastoji od 7 projekata:
+The solution consists of 8 projects:
 
 *IMDBLite.API.DataModels*
-	Sadrzi modele podataka iz baze, helper klase za izvrsavanje stored procedura, kao i dodatnu
-	klasu za izvlacenje podataka iz User Secrets okruzenja.
-
-*IMDBLite.API.BLL*
-	Sadrzi interface-e i implementacije Base repository-ja kao i dodatne interfce-e i implementacije
-	svih modela iz baze podataka, ukoliko bi se ukazala potreba za nekim specificnim radnjama nad odredjenim
-	repositorijumima.
-	Base repo sadrzi osnovne radnje tipa FindAll, Insert, Delete, Update...
+	It contains data models from the database, helper classes for executing stored procedures, as well as additional
+	a class for extracting data from the User Secrets environment.
+	
+*IMDBLite.API.Repository*
+	It contains Interfaces and implementations for repository, if there is a need for some specific actions on certain repositories. Also contains configuration for Repository dependency (DI).
+	Base repo contains basic actions such as FindAll, Insert, Delete, Update ...
+	
+*IMDBLite.BLL*
+	Business Layer Logic contains functions that are used to retrieve data. 
 	
 *IMDBLite.Server* 
-	Predstavlja API dio solution-a koji je zaduzen za logiku i pribavljanje podataka.
-	Dodatno se tu nalazi AuthAPIControler.(O njemu bih volio popricati na tehnickom razgovoru
-	ukoliko do njega dodje).
-	U sustini pravio sam authorizaciju client aplikacije na API (client credentials flow), medjutim,
-	u Blazoru sam naisao na sledeci problem gdje se WebAssembly aplikacija skida na korisnikov racunar
-	i kao takva otvara mogucnost dohvatanja podataka za logovanje. Na ovaj nacin sam sakrio te podatke, ali
-	otvorio nove probleme. (Rijec je o Auth0)
-	Ovaj problem bi se mogao rijesiti mozda sa Basic authorizacijom na servis AuthApi.
+	It is the API part of the solution that is in charge of logic and data acquisition.
+	Additionally, there is the AuthAPIController.(This is something I would discuss).
+	Basically, I was authorizing a client application on an API (client credentials flow), however,
+	in Blazor I came across the following problem where the WebAssembly application is downloaded to the user's computer
+	and as such opens the possibility of retrieving logging data. This way I hid that information, but
+	opened up new problems. (Auth method is Auth0)
+	This problem could be solved perhaps with Basic authorization on the AuthApi service.
 	
 *IMDBLite.DTO*
-	Sadrzi Data Transfer Request i Response objekte.
+	Contains Data Transfer Request and Response objects.
 
 *IMDBLite.Client*
-	Klijenta aplikacija koja sadrzi pages i lokigu ponasanja istih
+	A client application that contains pages and the logic of their behavior
 	
 *IMDBLite.Shared*
-	Sadrzao bi neke enume i stvari koje se koriste izmedju ostalih projekata.
-	Recimo sadrzi sada class-u koja sluzi kao model za paginaciju.
+	It would contain some enums and things used among other projects.
+	Let’s say it now contains a class that serves as a model for pagination.
 	
 *IMDBLite.ServiceClientContracts*
-	Predstavlja vezu izmedju klijenta i API-ja. Klijent poziva ServiceClientContractor koji dalje
-	salje pozive ka Apiju aplikacije.
-	
-Autentfikaciju korisnika nisam stigao zavrsiti, ali ona bi se mogla ubaciti isto preko Auth0.
+	Represents the connection between the client and the API. The client calls ServiceClientContractor which further
+	sends calls to the App app.
+		
+I did not manage to complete the user authentication, but it could also be inserted via Auth0.
 
-Dodatno export baze se nalazi takodje unutar git-a, file pod nazivom imdblite.sql
-Nakon restora baze, potrebno je u appsettings.json unutar IMDBLite.Server projekta izmjeniti *** 
-sa pravim podacima kako bi se aliplikacija nakacila na bazu.
+Additionally the export database is also inside git, a file called imdblite.sql
+After restore database, it is necessary in the appsettings.json within the IMDBLite.Server project to modify ***
+with the right data to connect the application to the database.
